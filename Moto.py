@@ -89,8 +89,8 @@ while menu != "Q" :
 		selectMoto()
 		input("Appuyez sur entrée pour continuer")
 	if menu == "3" :
-		a = 0
+		a = 3
 	if menu == "4" :
-		a = 0
+		a = 4
 	if menu == "5" :
-		a = 0
+		a = 5
