@@ -41,14 +41,23 @@ def marqueMoto(ligne):
 	moto["Marque"], moto["Modèle"], moto["Prix"], moto["Note personnelle"] = ligne.split(";")
 	return moto
 
-def modMoto():
-	a = 0
+def modMoto(moto):
+	i = 0
+	print("")
+	for donnee in moto :
+		if i > 0 :
+			print(str(i) + " : " + str(donnee))
+		i += 1
+	menu =input("Quelle donnée voulez-vous modifier? ")
 
-def viewMoto(cur) :
-	print("Liste des motos :\n")
+def listMoto(cur) :
+	print("\nListe des motos :\n")
 	cur.execute("SELECT id, marque, modele FROM motos")
 	for moto in cur :
 		print(moto)
+
+def viewMoto(cur) :
+	listMoto(cur)
 	menu1 = input("Quelle moto voulez-vous choisir? ")
 	try :
 		test = int(menu1) or int(menu1) < 9
@@ -60,7 +69,7 @@ def viewMoto(cur) :
 		print(donnee)
 	menu2 = input("Voulez-vous la modifier? ")
 	if menu2 == "oui" :
-		a = 0
+		modMoto(donnee)
 
 def delMoto():
 	a = 0
