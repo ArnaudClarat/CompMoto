@@ -40,7 +40,7 @@ def modMoto(moto):
 	i = 0
 	print("")
 	print("marque : " + str(moto[1]))
-	print("modèle : " + str(moto[2]))
+	print("modele : " + str(moto[2]))
 	print("prix : " + str(moto[3]))
 	print("notePerso : " + str(moto[4]))
 	menu = input("Quelle donnée voulez-vous modifier? ")
@@ -66,8 +66,9 @@ def viewMoto(cur) :
 		print(donnee)
 	menu2 = input("Voulez-vous la modifier? ")
 	if menu2 == "oui" :
-		mod = modMoto(donnee)
-		cur.execute("UPDATE motos SET ? = ? WHERE id = ?",(mod, menu1))
+		nomDonnee, newDonnee = modMoto(donnee)
+		cmd = "UPDATE motos SET " + nomDonnee + " = " + newDonnee + " WHERE id = " + menu1
+		cur.execute(cmd)
 
 def delMoto():
 	a = 0
@@ -91,7 +92,7 @@ while menu != "Q" :
 	print("1 = Ajouter une moto")
 	print("2 = Afficher une moto")
 	print("3 = Supprimer une moto")
-	print("4 = Afficher la meilleur moto")
+	print("4 = Afficher la meilleure moto")
 	print("Q = Quitter le programme")
 	menu = input("Que souhaitez-vous faire? ")
 
