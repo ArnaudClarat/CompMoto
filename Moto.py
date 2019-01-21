@@ -34,9 +34,8 @@ def remplissage():
 		# Opération sur la DB
 		cur.execute("CREATE TABLE IF NOT EXISTS motos (id INTEGER PRIMARY KEY, marque TEXT, modele TEXT, prix INTEGER, notePerso INTEGER)")
 		cur.execute("INSERT INTO motos (marque, modele, prix, notePerso) VALUES(?,?,?,?)",(newMoto()))
-		db.commit()
 
-def modMoto(moto):
+def modDonneeMoto(moto):
 	i = 0
 	print("")
 	print("marque : " + str(moto[1]))
@@ -47,14 +46,11 @@ def modMoto(moto):
 	change = input("Veuillez rentrer la nouvelle donnée : ")
 	return menu, change
 
-def listMoto(cur) :
+def choiceMoto(cur) :
 	print("\nListe des motos :\n")
 	cur.execute("SELECT id, marque, modele FROM motos")
 	for moto in cur :
 		print(moto)
-
-def viewMoto(cur) :
-	listMoto(cur)
 	menu1 = input("Quelle moto voulez-vous choisir? ")
 	try :
 		test = int(menu1) or int(menu1) < 9
@@ -64,14 +60,24 @@ def viewMoto(cur) :
 	cur.execute("SELECT * FROM motos WHERE id = ?",(menu1))
 	for donnee in cur :
 		print(donnee)
+	return menu1
+
+def modMoto(cur) :
+	menu1 = choiceMoto(cur)
 	menu2 = input("Voulez-vous la modifier? ")
 	if menu2 == "oui" :
-		nomDonnee, newDonnee = modMoto(donnee)
+		nomDonnee, newDonnee = modDonneeMoto(donnee)
 		cmd = "UPDATE motos SET " + nomDonnee + " = " + newDonnee + " WHERE id = " + menu1
 		cur.execute(cmd)
 
-def delMoto():
-	a = 0
+def delMoto(cur):
+	menu1 = choiceMoto(cur)
+	menu2 = input("Voulez-vous VRAIMENT la supprimer? ")
+	if menu2 == "oui" :
+		cmd = "DELETE FROM Motos WHERE id = " + menu1
+		cur.execute(cmd)
+		print("Moto supprimée")
+
 def bestMoto():
 	a = 0
 
@@ -99,10 +105,13 @@ while menu != "Q" :
 
 	if menu == "1" : 
 		remplissage()
+		db.commit()
 	if menu == "2" :
-		viewMoto(cur)
+		modMoto(cur)
+		db.commit()
 	if menu == "3" :
-		a = 3
+		delMoto(cur)
+		db.commit()
 	if menu == "4" :
 		a = 4
 
