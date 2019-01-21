@@ -35,20 +35,17 @@ def remplissage():
 		cur.execute("CREATE TABLE IF NOT EXISTS motos (id INTEGER PRIMARY KEY, marque TEXT, modele TEXT, prix INTEGER, notePerso INTEGER)")
 		cur.execute("INSERT INTO motos (marque, modele, prix, notePerso) VALUES(?,?,?,?)",(newMoto()))
 		db.commit()
-	
-def marqueMoto(ligne):
-	moto = {}
-	moto["Marque"], moto["Modèle"], moto["Prix"], moto["Note personnelle"] = ligne.split(";")
-	return moto
 
 def modMoto(moto):
 	i = 0
 	print("")
-	for donnee in moto :
-		if i > 0 :
-			print(str(i) + " : " + str(donnee))
-		i += 1
-	menu =input("Quelle donnée voulez-vous modifier? ")
+	print("marque : " + str(moto[1]))
+	print("modèle : " + str(moto[2]))
+	print("prix : " + str(moto[3]))
+	print("notePerso : " + str(moto[4]))
+	menu = input("Quelle donnée voulez-vous modifier? ")
+	change = input("Veuillez rentrer la nouvelle donnée : ")
+	return menu, change
 
 def listMoto(cur) :
 	print("\nListe des motos :\n")
@@ -69,14 +66,15 @@ def viewMoto(cur) :
 		print(donnee)
 	menu2 = input("Voulez-vous la modifier? ")
 	if menu2 == "oui" :
-		modMoto(donnee)
+		mod = modMoto(donnee)
+		cur.execute("UPDATE motos SET ? = ? WHERE id = ?",(mod, menu1))
 
 def delMoto():
 	a = 0
 def bestMoto():
 	a = 0
-#Définition Variable Globale
 
+#Définition Variable Globale
 moto=""
 menu = "x"
 
@@ -92,9 +90,8 @@ while menu != "Q" :
 	print("\nMenu :")
 	print("1 = Ajouter une moto")
 	print("2 = Afficher une moto")
-	print("3 = Modifier une moto")
-	print("4 = Supprimer une moto")
-	print("5 = Afficher la meilleur moto")
+	print("3 = Supprimer une moto")
+	print("4 = Afficher la meilleur moto")
 	print("Q = Quitter le programme")
 	menu = input("Que souhaitez-vous faire? ")
 
@@ -107,8 +104,6 @@ while menu != "Q" :
 		a = 3
 	if menu == "4" :
 		a = 4
-	if menu == "5" :
-		a = 5
 
 db.commit()
 db.close()
