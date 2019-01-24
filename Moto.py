@@ -26,14 +26,19 @@ def numOnly (string) :
 def newMoto():
 	marque = input("\nMarque? ")
 	modele = input("Modèle? ")
+	conso = input("Consommation? L/100km ")
+	puissance = input("Puissance? CV ")
+	reserv = input("Taille résérvoir? L")
+	autonomie = input("Autonomie? km")
 	prix = input("Prix? ")
 	notePerso= input("Note personnelle? /100 ")
-	return marque, modele, prix, notePerso
+	moto = marque, modele, conso, puissance, reserv, autonomie, prix, notePerso
+	return moto
 
 def remplissage():
 		# Opération sur la DB
-		cur.execute("CREATE TABLE IF NOT EXISTS motos (id INTEGER PRIMARY KEY, marque TEXT, modele TEXT, prix INTEGER, notePerso INTEGER)")
-		cur.execute("INSERT INTO motos (marque, modele, prix, notePerso) VALUES(?,?,?,?)",(newMoto()))
+		cur.execute("CREATE TABLE IF NOT EXISTS motos (id INTEGER PRIMARY KEY, marque TEXT, modele TEXT, conso REAL, puissance INTEGER, reserv REAL, autonomie REAL, prix INTEGER, notePerso INTEGER)")
+		cur.execute("INSERT INTO motos (marque, modele, conso, puissance, reserv, autonomie, prix, notePerso) VALUES(?,?,?,?,?,?,?,?)",(newMoto()))
 
 def modDonneeMoto(moto):
 	i = 0
