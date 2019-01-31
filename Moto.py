@@ -1,27 +1,14 @@
-import string
 import sqlite3
 from sqlite3 import Error
 
-def strToList(string): 
-	li = []
-	for letter in string :
-		li.append(letter)
-	return li 
-
-def isAlphabet(lettre):
-	retour = []
-	alpha = strToList(string.ascii_letters)
-	craps = set(alpha)
-	if lettre in craps:
-		retour.append(lettre)
-	return retour
-
-def numOnly (string) :
-	retour = ""
-	for i in string :	
-		if i.isdecimal() :
-			retour += i
-	return retour
+def menu():
+	print("""
+	Menu :
+		1 = Ajouter une moto
+		2 = Afficher une moto
+		3 = Supprimer une moto
+		4 = Afficher la meilleure moto
+		Q = Quitter le programme""")
 
 def newMoto():
 	marque = input("\nMarque? ")
@@ -32,8 +19,7 @@ def newMoto():
 	autonomie = input("Autonomie? km")
 	prix = input("Prix? ")
 	notePerso= input("Note personnelle? /100 ")
-	moto = marque, modele, conso, puissance, reserv, autonomie, prix, notePerso
-	return moto
+	return marque, modele, conso, puissance, reserv, autonomie, prix, notePerso
 
 def remplissage():
 		# Opération sur la DB
@@ -88,7 +74,8 @@ def bestMoto():
 
 #Définition Variable Globale
 moto=""
-menu = "x"
+msg= "	Que voulez-vous faire? "
+choix = "x"
 
 #Programme
 print("\nBienvenue dans ce comparateur de moto!")
@@ -98,27 +85,23 @@ try:
 except Error as e:
     print(e)
 
-while menu != "Q" :
-	print("\nMenu :")
-	print("1 = Ajouter une moto")
-	print("2 = Afficher une moto")
-	print("3 = Supprimer une moto")
-	print("4 = Afficher la meilleure moto")
-	print("Q = Quitter le programme")
-	menu = input("Que souhaitez-vous faire? ")
+while choix != "Q" :
+	menu()
+	choix = input(msg).upper()
 
-
-	if menu == "1" : 
+	if choix == "1" : 
 		remplissage()
 		db.commit()
-	if menu == "2" :
+	if choix == "2" :
 		modMoto(cur)
 		db.commit()
-	if menu == "3" :
+	if choix == "3" :
 		delMoto(cur)
 		db.commit()
-	if menu == "4" :
+	if choix == "4" :
 		a = 4
+	if choix == "Q" :
+		a = 0
 
 db.commit()
 db.close()
