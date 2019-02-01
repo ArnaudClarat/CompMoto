@@ -13,18 +13,19 @@ def menu():
 def newMoto():
 	marque = input("\nMarque? ")
 	modele = input("Modèle? ")
-	conso = input("Consommation? L/100km ")
 	puissance = input("Puissance? CV ")
-	reserv = input("Taille résérvoir? L")
-	autonomie = input("Autonomie? km")
+	conso = input("Consommation? L/100km ")
+	reserv = input("Taille résérvoir? L ")
+	autonomie = input("Autonomie? km ")
 	prix = input("Prix? ")
-	notePerso= input("Note personnelle? /100 ")
-	return marque, modele, conso, puissance, reserv, autonomie, prix, notePerso
+	notePerso = input("Note personnelle? /100 ")
+	noteTotale = "à coder"
+	return marque, modele, puissance, conso, reserv, autonomie, prix, notePerso, noteTotale
 
 def remplissage():
 		# Opération sur la DB
-		cur.execute("CREATE TABLE IF NOT EXISTS motos (id INTEGER PRIMARY KEY, marque TEXT, modele TEXT, conso REAL, puissance INTEGER, reserv REAL, autonomie REAL, prix INTEGER, notePerso INTEGER)")
-		cur.execute("INSERT INTO motos (marque, modele, conso, puissance, reserv, autonomie, prix, notePerso) VALUES(?,?,?,?,?,?,?,?)",(newMoto()))
+		cur.execute("CREATE TABLE IF NOT EXISTS motos (id INTEGER PRIMARY KEY, marque TEXT, modele TEXT, puissance INTEGER, conso REAL, reserv REAL, autonomie REAL, prix INTEGER, notePerso INTEGER, noteTotale REAL)")
+		cur.execute("INSERT INTO motos (marque, modele, puissance, conso, reserv, autonomie, prix, notePerso, noteTotale) VALUES(?,?,?,?,?,?,?,?,?)",(newMoto()))
 
 def modDonneeMoto(moto):
 	i = 0
@@ -69,8 +70,8 @@ def delMoto(cur):
 		cur.execute(cmd)
 		print("Moto supprimée")
 
-def bestMoto():
-	a = 0
+def bestMoto(cur):
+    cur.execute("SELECT MAX (SELECT noteTotale FROM motos)")
 
 #Définition Variable Globale
 moto=""
@@ -99,9 +100,7 @@ while choix != "Q" :
 		delMoto(cur)
 		db.commit()
 	if choix == "4" :
-		a = 4
-	if choix == "Q" :
-		a = 0
+		bestMoto(cur)
 
 db.commit()
 db.close()
