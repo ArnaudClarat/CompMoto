@@ -49,7 +49,7 @@ def choiceMoto(cur) :
 	print("\nListe des motos :\n")
 	cur.execute("SELECT id, marque, modele FROM motos")
 	for moto in cur :
-		print(moto)
+		print(moto[0], ":", moto[1], moto[2])
 	menu1 = input("Quelle moto voulez-vous choisir? ")
 	try :
 		test = int(menu1) or int(menu1) < 9
