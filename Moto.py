@@ -13,13 +13,20 @@ def menu():
 def newMoto():
 	marque = input("\nMarque? ")
 	modele = input("Modèle? ")
-	puissance = input("Puissance? CV ")
+	puissance = input("Puissance? kW ") 
+	notePuissance = (int(puissance) - 20) #Coté sur 15 (Meilleur = 35/Pire = 20)
 	conso = input("Consommation? L/100km ")
+	noteConso = (float(conso) - 2) * 5 #Coté sur 20 (Meilleur = 2/Pire = 6)
 	reserv = input("Taille résérvoir? L ")
-	autonomie = input("Autonomie? km ")
+	noteReserv = (float(reserv) - 5) * 1.5 #Coté sur 30 (Meilleur = 25/Pire = 5)
+	autonomie = input("Autonomie? km ") 
+	noteAutonomie = (float(autonomie) - 200) / 20 #Coté sur 20 (Meilleur = 600/Pire = 200)
 	prix = input("Prix? ")
-	notePerso = input("Note personnelle? /100 ")
-	noteTotale = "à coder"
+	notePrix = (float(prix) - 1000) / 160 #Coté sur 25 (Meilleur = 1000/Pire = 5000)
+	notePerso = input("Note personnelle? /100 ") 
+	noteNPerso = (int(notePerso) * 0.9) #Coté sur 90 (Meilleur = 100/Pire = 0)
+	noteTotale = (notePuissance + noteConso + noteReserv + noteAutonomie + notePrix + noteNPerso) / 2
+	print("Note totale = ", noteTotale)
 	return marque, modele, puissance, conso, reserv, autonomie, prix, notePerso, noteTotale
 
 def remplissage():
@@ -71,7 +78,8 @@ def delMoto(cur):
 		print("Moto supprimée")
 
 def bestMoto(cur):
-    cur.execute("SELECT MAX (SELECT noteTotale FROM motos)")
+    cur.execute("SELECT marque, modele FROM motos WHERE noteTotale = (SELECT MAX(noteTotale) FROM motos)")
+    print(cur.fetchall())
 
 #Définition Variable Globale
 moto=""
