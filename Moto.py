@@ -11,6 +11,8 @@ def menu():
 		Q = Quitter le programme""")
 
 def calculNoteTotale(moto):
+	print(moto)
+	print(type(moto))
 	notePuissance = (int(moto[3]) - 20) #Coté sur 15 (Meilleur = 35/Pire = 20)
 	noteConso = (float(moto[4]) - 2) * 5 #Coté sur 20 (Meilleur = 2/Pire = 6)
 	noteReserv = (float(moto[5]) - 5) * 1.5 #Coté sur 30 (Meilleur = 25/Pire = 5)
@@ -36,11 +38,29 @@ def newMoto():
 
 def remplissage():
 		# Opération sur la DB
-		cur.execute("CREATE TABLE IF NOT EXISTS motos (id INTEGER PRIMARY KEY, marque TEXT, modele TEXT, puissance INTEGER, conso REAL, reserv REAL, autonomie REAL, prix INTEGER, notePerso INTEGER, noteTotale REAL)")
-		cur.execute("INSERT INTO motos (marque, modele, puissance, conso, reserv, autonomie, prix, notePerso, noteTotale) VALUES(?,?,?,?,?,?,?,?,?)",(newMoto()))
-
-def modDonneeMoto(moto):
-	return menu, change
+		cur.execute("""CREATE TABLE IF NOT EXISTS motos (
+			  id INTEGER PRIMARY KEY,
+			  marque TEXT, modele TEXT,
+			  puissance INTEGER,
+			  conso REAL,
+			  reserv REAL,
+			  autonomie REAL,
+			  prix INTEGER,
+			  notePerso INTEGER,
+			  noteTotale REAL)
+			  """)
+		cur.execute("""INSERT INTO motos (
+					marque,
+					modele,
+					puissance,
+					conso,
+					reserv,
+					autonomie,
+					prix, 
+					notePerso,
+					noteTotale
+					) VALUES(?,?,?,?,?,?,?,?,?)"
+					""",(newMoto()))
 
 def modMoto(cur, menu1) :
 	noteTotale = 0
@@ -87,7 +107,11 @@ def delMoto(cur):
 		print("Moto supprimée")
 
 def bestMoto(cur):
-    cur.execute("SELECT marque, modele FROM motos WHERE noteTotale = (SELECT MAX(noteTotale) FROM motos)")
+    cur.execute("""SELECT marque, modele
+				FROM motos
+				WHERE noteTotale = (SELECT MAX(noteTotale) 
+									FROM motos)
+				""")
     print(cur.fetchall())
 
 #Définition Variable Globale
