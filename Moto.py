@@ -11,14 +11,12 @@ def menu():
 		Q = Quitter le programme""")
 
 def calculNoteTotale(moto):
-	print(moto)
-	print(type(moto))
-	notePuissance = (int(moto[3]) - 20) #Coté sur 15 (Meilleur = 35/Pire = 20)
-	noteConso = (float(moto[4]) - 2) * 5 #Coté sur 20 (Meilleur = 2/Pire = 6)
-	noteReserv = (float(moto[5]) - 5) * 1.5 #Coté sur 30 (Meilleur = 25/Pire = 5)
-	noteAutonomie = (float(moto[6]) - 200) / 20 #Coté sur 20 (Meilleur = 600/Pire = 200)
-	notePrix = (float(moto[7]) - 1000) / 160 #Coté sur 25 (Meilleur = 1000/Pire = 5000)
-	noteNPerso = (int(moto[8]) * 0.9) #Coté sur 90 (Meilleur = 100/Pire = 0)
+	notePuissance = (int(moto[2]) - 20) #Coté sur 15 (Meilleur = 35/Pire = 20)
+	noteConso = (float(moto[3]) - 2) * 5 #Coté sur 20 (Meilleur = 2/Pire = 6)
+	noteReserv = (float(moto[4]) - 5) * 1.5 #Coté sur 30 (Meilleur = 25/Pire = 5)
+	noteAutonomie = (float(moto[5]) - 200) / 20 #Coté sur 20 (Meilleur = 600/Pire = 200)
+	notePrix = (float(moto[6]) - 1000) / 160 #Coté sur 25 (Meilleur = 1000/Pire = 5000)
+	noteNPerso = (int(moto[7]) * 0.9) #Coté sur 90 (Meilleur = 100/Pire = 0)
 	noteTotale = (notePuissance + noteConso + noteReserv + noteAutonomie + notePrix + noteNPerso) / 2
 	return noteTotale
 
@@ -59,7 +57,7 @@ def remplissage():
 					prix, 
 					notePerso,
 					noteTotale
-					) VALUES(?,?,?,?,?,?,?,?,?)"
+					) VALUES(?,?,?,?,?,?,?,?,?)
 					""",(newMoto()))
 
 def modMoto(cur, menu1) :
@@ -69,9 +67,8 @@ def modMoto(cur, menu1) :
 	cmd = "UPDATE motos SET " + nomDonnee + " = " + newDonnee + " WHERE id = " + menu1
 	cur.execute(cmd)
 	cur.execute("SELECT * FROM motos WHERE id = " + menu1)
-	test = cur.fetchall()
-	print(test)
-	noteTotale = calculNoteTotale(test)
+	test = cur.fetchone()
+	noteTotale = calculNoteTotale(test[-8:])
 	cmd2 = "UPDATE motos SET noteTotale = " + str(noteTotale) + " WHERE id = " + menu1
 	cur.execute(cmd2)
 
@@ -107,12 +104,13 @@ def delMoto(cur):
 		print("Moto supprimée")
 
 def bestMoto(cur):
-    cur.execute("""SELECT marque, modele
+    cur.execute("""SELECT marque, modele, prix
 				FROM motos
 				WHERE noteTotale = (SELECT MAX(noteTotale) 
 									FROM motos)
 				""")
-    print(cur.fetchall())
+    best = cur.fetchone()
+    print("\nLa meilleure moto est la " + best[0], best[1] + " à " + str(best[2]) + "€")
 
 #Définition Variable Globale
 moto=""
